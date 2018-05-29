@@ -19,10 +19,10 @@ openshift_disable_check=disk_availability,docker_storage,memory_availability
 openshift_deployment_type=openshift-enterprise
 
 openshift_master_default_subdomain={{ inventory_hostname }}.nip.io
-openshift_public_hostname=ec2-{{ inventory_hostname }}.eu-central-1.compute.amazonaws.com
+openshift_public_hostname=ec2-{{ inventory_hostname | replace('.', '-') }}.eu-central-1.compute.amazonaws.com
 
-# uncomment the following to enable htpasswd authentication; defaults to DenyAllPasswordIdentityProvider
-#openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
+openshift_auth_type=allowall
+openshift_master_identity_providers=[{'name': 'allow_all', 'login': 'true', 'challenge': 'true', 'kind': 'AllowAllPasswordIdentityProvider'}]
 
 # host group for masters
 [masters]

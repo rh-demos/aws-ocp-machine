@@ -4,7 +4,8 @@
   vars:
     security_group: MySecurityGroup-ansible
     region: eu-central-1
-    ami_id: ami-194cdc76
+    ami_id: ami-c86c3f23
+    #ami_id: ami-194cdc76
   tasks:
   - name: Ensure a security group with correct ingress/egress rules are in place
     ec2_group:
