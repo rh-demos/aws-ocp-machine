@@ -24,6 +24,9 @@ openshift_public_hostname=ec2-{{ inventory_hostname | replace('.', '-') }}.eu-ce
 openshift_auth_type=allowall
 openshift_master_identity_providers=[{'name': 'allow_all', 'login': 'true', 'challenge': 'true', 'kind': 'AllowAllPasswordIdentityProvider'}]
 
+openshift_logging_install_logging=true
+openshift_metrics_install_metrics=true
+
 # host group for masters
 [masters]
 {{ hostvars[inventory_hostname].ansible_fqdn }}
