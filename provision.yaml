@@ -47,9 +47,9 @@
       wait: true
       exact_count: 1
       count_tag:
-        identity: system
+        identity: ocp-master
       instance_tags:
-        identity: system
+        identity: ocp-master
       volumes:
         - device_name: /dev/sda1
           volume_type: gp2

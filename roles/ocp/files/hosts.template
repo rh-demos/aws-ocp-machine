@@ -3,6 +3,7 @@
 masters
 nodes
 etcd
+nfs
 
 # Set variables common for all OSEv3 hosts
 [OSEv3:vars]
@@ -27,8 +28,28 @@ openshift_master_identity_providers=[{'name': 'allow_all', 'login': 'true', 'cha
 openshift_logging_install_logging=true
 openshift_metrics_install_metrics=true
 
+# fix for https://github.com/openshift/openshift-ansible/issues/8717
+oreg_url=registry.access.redhat.com/openshift3/ose-${component}:${version}
+openshift_examples_modify_imagestreams=true
+
+#config for nfs
+openshift_hosted_etcd_storage_kind=nfs
+openshift_hosted_etcd_storage_nfs_options="*(rw,root_squash,sync,no_wdelay)"
+openshift_hosted_etcd_storage_nfs_directory=/opt/osev3-etcd 
+openshift_hosted_etcd_storage_volume_name=etcd-vol2 
+openshift_hosted_etcd_storage_access_modes=["ReadWriteOnce"]
+openshift_hosted_etcd_storage_volume_size=1G
+openshift_hosted_etcd_storage_labels={'storage': 'etcd'}
+
+# fix for ansible service catalog
+openshift_service_catalog_image_version=v3.9
+
 # host group for masters
 [masters]
+{{ hostvars[inventory_hostname].ansible_fqdn }}
+
+# host group for nfs
+[nfs]
 {{ hostvars[inventory_hostname].ansible_fqdn }}
 
 # host group for etcd
