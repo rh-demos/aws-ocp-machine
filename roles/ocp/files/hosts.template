@@ -22,7 +22,7 @@ openshift_master_dynamic_provisioning_enabled=True
 
 #https://access.redhat.com/solutions/4357461
 #https://docs.openshift.com/container-platform/3.11/install_config/configuring_red_hat_registry.html
-oreg_auth_user=rhn-support-jborella
+oreg_auth_user={{ lookup('env', 'RH_USER') }}
 oreg_auth_password={{ lookup('env', 'RH_PASSWORD') }}
 oreg_url=registry.redhat.io/openshift3/ose-${component}:${version}
 
