@@ -16,14 +16,14 @@ openshift_enable_service_catalog=true
 
 openshift_cloudprovider_kind=aws
 openshift_clusterid=openshift 
-openshift_cloudprovider_aws_access_key=<insert access key here>
-openshift_cloudprovider_aws_secret_key=<insert secret key here>
+openshift_cloudprovider_aws_access_key={{ lookup('env', 'MY_SECRET_ACCESS_KEY') }}
+openshift_cloudprovider_aws_secret_key={{ lookup('env', 'MY_KEY_ID') }}
 openshift_master_dynamic_provisioning_enabled=True
 
 #https://access.redhat.com/solutions/4357461
 #https://docs.openshift.com/container-platform/3.11/install_config/configuring_red_hat_registry.html
 oreg_auth_user=rhn-support-jborella
-oreg_auth_password=<Insert RH password here>
+oreg_auth_password={{ lookup('env', 'RH_PASSWORD') }}
 oreg_url=registry.redhat.io/openshift3/ose-${component}:${version}
 
 # If ansible_ssh_user is not root, ansible_become must be set to true
