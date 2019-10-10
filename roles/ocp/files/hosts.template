@@ -14,6 +14,17 @@ ansible_become=true
 openshift_disable_check=disk_availability,docker_storage,memory_availability
 openshift_enable_service_catalog=true
 
+openshift_cloudprovider_kind=aws
+openshift_clusterid=openshift 
+openshift_cloudprovider_aws_access_key=<insert access key here>
+openshift_cloudprovider_aws_secret_key=<insert secret key here>
+openshift_master_dynamic_provisioning_enabled=True
+
+#https://access.redhat.com/solutions/4357461
+#https://docs.openshift.com/container-platform/3.11/install_config/configuring_red_hat_registry.html
+oreg_auth_user=rhn-support-jborella
+oreg_auth_password=<Insert RH password here>
+oreg_url=registry.redhat.io/openshift3/ose-${component}:${version}
 
 # If ansible_ssh_user is not root, ansible_become must be set to true
 #ansible_become=true
@@ -26,11 +37,13 @@ openshift_public_hostname=ec2-{{ inventory_hostname | replace('.', '-') }}.eu-ce
 openshift_auth_type=allowall
 openshift_master_identity_providers=[{'name': 'allow_all', 'login': 'true', 'challenge': 'true', 'kind': 'AllowAllPasswordIdentityProvider'}]
 
+# setup logging
 openshift_logging_install_logging=true
+openshift_logging_es_nodeselector={"node-role.kubernetes.io/infra":"true"}
+
+# setup metrics
 openshift_metrics_install_metrics=true
 
-# fix for https://github.com/openshift/openshift-ansible/issues/8717
-oreg_url=registry.access.redhat.com/openshift3/ose-${component}:${version}
 openshift_examples_modify_imagestreams=true
 
 #config for nfs
@@ -43,7 +56,7 @@ openshift_hosted_etcd_storage_volume_size=1G
 openshift_hosted_etcd_storage_labels={'storage': 'etcd'}
 
 # fix for ansible service catalog
-openshift_service_catalog_image_version=v3.9
+openshift_service_catalog_image_version=v3.11
 
 # host group for masters
 [masters]
@@ -59,5 +72,5 @@ openshift_service_catalog_image_version=v3.9
 
 # host group for nodes, includes region info
 [nodes]
-{{ hostvars[inventory_hostname].ansible_fqdn }} openshift_node_labels="{'region':'infra','zone':'east'}" openshift_schedulable=true
+{{ hostvars[inventory_hostname].ansible_fqdn }} openshift_node_group_name='node-config-all-in-one'
 

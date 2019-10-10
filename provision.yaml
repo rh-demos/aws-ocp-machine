@@ -4,7 +4,8 @@
   vars:
     security_group: MySecurityGroup-ansible
     region: eu-central-1
-    ami_id: ami-c86c3f23
+    ami_id: ami-062dacb006c5860f9
+    #ami_id: ami-c86c3f23
   tasks:
   - name: Ensure a security group with correct ingress/egress rules are in place
     ec2_group:
@@ -41,8 +42,8 @@
       key_name: my_key
       region: "{{ region }}"
       group: "{{ security_group }}"
-#      instance_type: t2.large
-      instance_type: t2.xlarge
+      instance_type: t2.2xlarge
+#      instance_type: t2.xlarge
       image: "{{ ami_id }}"
       wait: true
       exact_count: 1
@@ -50,6 +51,7 @@
         identity: ocp-master
       instance_tags:
         identity: ocp-master
+        kubernetes.io/cluster/openshift: owned
       volumes:
         - device_name: /dev/sda1
           volume_type: gp2
@@ -88,18 +90,14 @@
   - name: Disable all repos
     shell: yum-config-manager --disable \* 
   - name: Enable needed repos
-    shell: subscription-manager repos     --enable="rhel-7-server-rpms"     --enable="rhel-7-server-extras-rpms"     --enable="rhel-7-server-ose-3.9-rpms"     --enable="rhel-7-fast-datapath-rpms"     --enable="rhel-7-server-ansible-2.4-rpms"
+    shell: subscription-manager repos     --enable="rhel-7-server-rpms"     --enable="rhel-7-server-extras-rpms"     --enable="rhel-7-server-ose-3.11-rpms"     --enable="rhel-7-server-ansible-2.6-rpms"
   - name: Install required packages
     yum:
-      name: wget,git,net-tools,bind-utils,yum-utils,iptables-services,bridge-utils,bash-completion,kexec-tools,sos,psacct
+      name: wget,git,net-tools,bind-utils,yum-utils,iptables-services,bridge-utils,bash-completion,kexec-tools,sos,psacct,openshift-ansible
       state: latest
   - name: upgrade all packages
     yum:
       name: '*'
-      state: latest
-  - name: Install atomic-openshift-utils
-    yum:
-      name: atomic-openshift-utils
       state: latest
   - name: Install docker
     yum:
