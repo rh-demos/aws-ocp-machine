@@ -1,6 +1,6 @@
-MY_KEY_ID=
-MY_SECRET_ACCESS_KEY=
-MY_REGION=eu-central-1
+export MY_KEY_ID=
+export MY_SECRET_ACCESS_KEY=
+export MY_REGION=eu-central-1
 
 export RH_USER=
 export RH_PASSWORD=
